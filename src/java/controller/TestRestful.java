@@ -6,10 +6,14 @@
 package controller;
 
 import bean.Greeting;
+import com.google.gson.Gson;
 import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,14 +21,26 @@ import org.springframework.web.bind.annotation.RestController;
  * @author RigoBono
  */
 @RestController
+@RequestMapping("/service")
 public class TestRestful {
-    private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
 
-    @RequestMapping(value = "/hola", method = RequestMethod.GET,headers="Accept=application/json")
-    public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name) {
-        return new Greeting(counter.incrementAndGet(),
-                            String.format(template, name));
+    //http://localhost:8080/EJSpringMVC/service/getSaludo.htm
+    @RequestMapping(value="getSaludo",method = RequestMethod.GET,produces="application/json")
+    public @ResponseBody  String get(){
+        Greeting g=new Greeting(1,"");
+        Gson g1=new Gson();
+        
+        return g1.toJson(g);
     }
     
+    //http://localhost:8080/EJSpringMVC/service/getSaludo2.htm?nombre=Rigo
+    @RequestMapping(value="getSaludo2",method = RequestMethod.GET,produces="application/json")
+    public @ResponseBody  String get(@RequestParam("nombre") String nombre){
+        Greeting g=new Greeting(1,nombre);
+        Gson g1=new Gson();
+        
+        return g1.toJson(g);
+    }
+    
+ 
 }
